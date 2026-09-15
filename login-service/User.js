@@ -1,5 +1,4 @@
 // login-service/User.js
-// Same schema as registration-service, so this service can read the same "users" collection.
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({

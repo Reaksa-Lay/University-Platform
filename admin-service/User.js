@@ -1,5 +1,4 @@
 // admin-service/User.js
-// Same schema as registration-service, reads/writes the same "users" collection.
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
