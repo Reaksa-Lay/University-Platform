@@ -46,7 +46,7 @@ app.post('/auth/login', async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }       // 1h : Token is valid for 1 hour, 1m : Token is valid for 1 minute
+      { expiresIn: '24h' }       // 24h : Token is valid for 24 hour, 1m : Token is valid for 1 minute
     );
 
     res.status(200).json({
