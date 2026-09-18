@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const proxy = httpProxy.createProxyServer();
 
@@ -50,12 +50,18 @@ function forwardTo(target) {
   };
 }
 
+// Target URLs now come from .env, not hardcoded — same code works locally and on EC2
+const REGISTRATION_URL = process.env.REGISTRATION_URL || 'http://localhost:5001';
+const LOGIN_URL = process.env.LOGIN_URL || 'http://localhost:5002';
+const ADMIN_URL = process.env.ADMIN_URL || 'http://localhost:5003';
+const USER_URL = process.env.USER_URL || 'http://localhost:5004';
+
 // Public routes - no token needed
-app.all('/register/*splat', forwardTo('http://localhost:5001'));
-app.all('/auth/*splat', forwardTo('http://localhost:5002'));
+app.all('/register/*splat', forwardTo(REGISTRATION_URL));
+app.all('/auth/*splat', forwardTo(LOGIN_URL));
 
 // Protected routes - token + role required
-app.all('/admin/*splat', verifyToken, requireRole('admin'), forwardTo('http://localhost:5003'));
-app.all('/user/*splat', verifyToken, requireRole('user'), forwardTo('http://localhost:5004'));
+app.all('/admin/*splat', verifyToken, requireRole('admin'), forwardTo(ADMIN_URL));
+app.all('/user/*splat', verifyToken, requireRole('user'), forwardTo(USER_URL));
 
 app.listen(PORT, () => console.log(`API Gateway running on ${PORT}`));
